@@ -1,0 +1,20 @@
+; pastebin/new.phn
+(require "sql.php")
+(require "html.php")
+
+(fn print-paste-link (id)
+  (print (html-link (. "/pastebin/paste.php?id=" id) "New paste")))
+
+(fn print-paste-form ()
+  (print (html-form "post" ($ server "PHP_SELF")
+                    (html-textbox "title")
+                    (html-textarea "contents")
+                    (html-submit "submit"))))
+
+(sql-connect "root" "root" "pastebindb")
+
+(if (isset ($ post "submit"))
+  (print-paste-link (sql-insert "pastes" 
+                                {"title" ($ post "title"),
+                                 "contents" ($ post "contents")}))
+  (print-paste-form))

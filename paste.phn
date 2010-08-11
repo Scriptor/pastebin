@@ -1,0 +1,12 @@
+; pastebin/paste.phn
+(require "sql.php")
+
+(sql-connect "root" "root" "pastebindb")
+
+(fn print-paste (paste)
+  (print (. "<h2>" (:paste "title") "</h2>"
+     "<p>" (:paste "contents") "</p>")))
+
+(if (isset ($ get "id"))
+  (print-paste (sql-fetch-by-id "pastes" ($ get "id")))
+  (print "No paste id provided."))
